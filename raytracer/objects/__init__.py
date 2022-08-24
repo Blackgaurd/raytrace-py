@@ -1,4 +1,5 @@
-from .sphere import Sphere
-from .triangle import Triangle
+from raytracer.objects.object_t import Object
+from raytracer.objects.sphere import Sphere
+from raytracer.objects.triangle import Triangle
 
-__all__ = ["Sphere", "Triangle"]
+__all__ = ["Object", "Sphere", "Triangle"]

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from raytracer.vec3 import Vec3
 
 

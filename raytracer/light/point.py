@@ -1,6 +1,3 @@
-import math
-from typing import Tuple
-
 from raytracer.light.light_t import Light
 from raytracer.vec3 import Vec3
 

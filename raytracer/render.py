@@ -4,10 +4,9 @@ from typing import List
 
 from alive_progress import alive_bar
 
-from raytracer.light.directional import DirectionalLight
-from raytracer.light.light_t import Light
-from raytracer.objects.object_t import Object
-from raytracer.options import Resolution, Settings
+from raytracer.light import Light
+from raytracer.objects import Object
+from raytracer.utils import Resolution, Settings
 from raytracer.vec3 import Vec3
 
 
