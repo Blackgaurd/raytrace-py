@@ -18,3 +18,4 @@ class Settings:
     resolution: Resolution
     distance_to_image: float
     fov: float
+    bias: float

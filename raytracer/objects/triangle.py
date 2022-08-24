@@ -1,18 +1,19 @@
 from typing import Tuple
+from raytracer.materials import Material
 
 from raytracer.objects.object_t import Object
-from raytracer.utils import EPSILON
+from raytracer.options import EPSILON
 from raytracer.vec3 import Vec3
 
 
 class Triangle(Object):
-    __slots__ = ("a", "b", "c", "albedo", "N")
+    __slots__ = ("a", "b", "c", "material", "N")
 
-    def __init__(self, a: Vec3, b: Vec3, c: Vec3, albedo: Vec3):
+    def __init__(self, a: Vec3, b: Vec3, c: Vec3, material: Material):
         self.a = a
         self.b = b
         self.c = c
-        self.albedo = albedo
+        self.material = material
 
         self.N = (b - a).cross(c - a).normalize()
 

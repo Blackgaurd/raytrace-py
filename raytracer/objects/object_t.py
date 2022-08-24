@@ -1,11 +1,12 @@
 from typing import Tuple
 
 from raytracer.vec3 import Vec3
+from raytracer.materials import Material
 
 
 class Object:
-    def __init__(self, albedo: Vec3, *args, **kwargs):
-        self.albedo = albedo
+    def __init__(self, material: Material, *args, **kwargs):
+        self.material = material
         raise NotImplementedError()
 
     def normal(self, ray_d: Vec3, intersect: Vec3) -> Vec3:

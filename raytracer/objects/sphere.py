@@ -1,20 +1,18 @@
 import math
 from typing import Tuple
+from raytracer.materials import Material
 
 from raytracer.objects.object_t import Object
 from raytracer.vec3 import Vec3
 
 
 class Sphere(Object):
-    __slots__ = ("origin", "radius", "albedo")
+    __slots__ = ("origin", "radius", "amterial")
 
-    def __init__(self, origin: Vec3, radius: float, albedo: Vec3):
+    def __init__(self, origin: Vec3, radius: float, material: Material):
         self.origin = origin
         self.radius = radius
-
-        # albedo is the percentage of each component
-        # of light (red, green, blue) that gets reflected
-        self.albedo = albedo
+        self.material = material
 
     def normal(self, ray_d: Vec3, intersect: Vec3) -> Vec3:
         return (intersect - self.origin).normalize()

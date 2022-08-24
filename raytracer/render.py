@@ -4,9 +4,10 @@ from typing import List
 
 from alive_progress import alive_bar
 
-from raytracer.light import Light
+from raytracer.lights import Light
+from raytracer.materials import MaterialBehavior
 from raytracer.objects import Object
-from raytracer.utils import Resolution, Settings
+from raytracer.options import Resolution, Settings
 from raytracer.vec3 import Vec3
 
 
@@ -16,7 +17,7 @@ def check_interference(
     # check if ray intersects with any object
     # assuming that all objects are opaque
     for i, obj in enumerate(objects):
-        if i == source_ind:
+        if i == source_ind or obj.material.type != MaterialBehavior.diffuse:
             continue
         intersect, t = obj.intersect(ray_o, ray_d)
         if intersect:
@@ -30,7 +31,11 @@ def cast_ray(
     objects: List[Object],
     lights: List[Light],
     settings: Settings,
+    max_depth: int = 5,
 ) -> Vec3:
+    if max_depth == 0:
+        return Vec3(0, 0, 0)
+
     closest_t = float("inf")
     obj_ind = -1
     for i, obj in enumerate(objects):
@@ -47,20 +52,40 @@ def cast_ray(
     normal = obj.normal(ray_d, intersect)
 
     hit_color = Vec3(0, 0, 0)
-    for light in lights:
-        light_dir = light.direction_at(intersect)
 
-        # shadows
-        if check_interference(intersect, light_dir, objects, obj_ind):
-            continue
+    if obj.material.type == MaterialBehavior.diffuse:
+        # diffuse lighting
+        for light in lights:
+            light_dir = light.direction_at(intersect)
 
-        # shading
+            # shadows
+            if check_interference(
+                intersect + normal * settings.bias, light_dir, objects, obj_ind
+            ):
+                continue
+
+            # shading
+            hit_color += (
+                obj.material.albedo
+                / math.pi
+                * light.intensity
+                * light.color
+                * max(0, normal.dot(light_dir))
+            )
+
+    elif obj.material.type == MaterialBehavior.reflect:
+        # perfect mirror reflection
+        reflect_d = obj.material.reflect(ray_d, normal)
         hit_color += (
-            obj.albedo
-            / math.pi
-            * light.intensity
-            * light.color
-            * max(0, normal.dot(light_dir))
+            cast_ray(
+                intersect + normal * settings.bias,
+                reflect_d,
+                objects,
+                lights,
+                settings,
+                max_depth - 1,
+            )
+            * 0.8  # rough fresnel effect approximation
         )
 
     return hit_color
