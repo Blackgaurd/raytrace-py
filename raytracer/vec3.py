@@ -16,8 +16,7 @@ class Vec3:
         return Vec3(red, green, blue) / 255
 
     def normalize(self) -> Vec3:
-        mx = max(abs(self.x), abs(self.y), abs(self.z))
-        return self / mx
+        return self / self.norm()
 
     def dot(self, other: Vec3) -> float:
         return self.x * other.x + self.y * other.y + self.z * other.z
@@ -29,7 +28,9 @@ class Vec3:
             self.x * other.y - self.y * other.x,
         )
 
-    def magnitude(self) -> float:
+    def norm(self) -> float:
+        # Frobenius norm
+        # same as magnitude
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def distance(self, other: Vec3) -> float:
@@ -39,7 +40,7 @@ class Vec3:
 
     def tt_angle(self, other: Vec3) -> float:
         # tail-tail angle
-        return math.acos(self.dot(other) / (self.magnitude() * other.magnitude()))
+        return math.acos(self.dot(other) / (self.norm() * other.norm()))
 
     def __repr__(self) -> str:
         return f"Vec3({self.x}, {self.y}, {self.z})"
