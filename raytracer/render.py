@@ -31,7 +31,7 @@ def cast_ray(
     objects: List[Object],
     lights: List[Light],
     settings: Settings,
-    max_depth: int = 5,
+    max_depth: int,
 ) -> Vec3:
     if max_depth == 0:
         return Vec3(0, 0, 0)
@@ -96,7 +96,9 @@ def render(
     objects: List[Object],
     lights: List[Light],
     settings: Settings,
+    *,
     anti_aliasing: int = 1,
+    recursion_depth: int = 5,
 ) -> List[List[Vec3]]:
     # todo: add asserts
 
@@ -122,7 +124,9 @@ def render(
                 )
                 ray_d = p2 - camera
 
-                image[i][j] += cast_ray(camera, ray_d, objects, lights, settings)
+                image[i][j] += cast_ray(
+                    camera, ray_d, objects, lights, settings, recursion_depth
+                )
                 bar()
             image[i][j] /= AA**2
 
