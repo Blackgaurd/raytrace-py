@@ -4,6 +4,4 @@ Very few optimizations were made other than algorithm specific. This is because 
 
 ## Demonstrations
 
-![spheres](img/spheres.png)
-
-![mirrors](img/mirrors.png)
+![rainbow](examples/rainbow/image.png)

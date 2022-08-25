@@ -34,7 +34,7 @@ def cast_ray(
     max_depth: int,
 ) -> Vec3:
     if max_depth == 0:
-        return Vec3(0, 0, 0)
+        return settings.background_color
 
     closest_t = float("inf")
     obj_ind = -1
@@ -50,6 +50,7 @@ def cast_ray(
     obj = objects[obj_ind]
     intersect: Vec3 = ray_o + ray_d * closest_t
     normal = obj.normal(ray_d, intersect)
+    bias = normal * settings.bias
 
     hit_color = Vec3(0, 0, 0)
 
@@ -59,9 +60,7 @@ def cast_ray(
             light_dir = light.direction_at(intersect)
 
             # shadows
-            if check_interference(
-                intersect + normal * settings.bias, light_dir, objects, obj_ind
-            ):
+            if check_interference(intersect + bias, light_dir, objects, obj_ind):
                 continue
 
             # shading
@@ -78,7 +77,7 @@ def cast_ray(
         reflect_d = obj.material.reflect(ray_d, normal)
         hit_color += (
             cast_ray(
-                intersect + normal * settings.bias,
+                intersect + bias,
                 reflect_d,
                 objects,
                 lights,
