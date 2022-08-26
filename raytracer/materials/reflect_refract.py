@@ -1,4 +1,5 @@
 import math
+
 from raytracer.materials.material_t import MaterialBehavior
 from raytracer.materials.reflect import Reflect
 from raytracer.vec3 import Vec3

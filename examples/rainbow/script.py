@@ -27,5 +27,5 @@ lights = [
     DirectionalLight(Vec3(1, -0.3, 1), Vec3(1, 1, 1), 1),
 ]
 image = render(camera, objects, lights, settings, anti_aliasing=2, recursion_depth=10)
-save_png(image, "examples/rainbow/image2.png")
-print("Image saved to examples/rainbow/image2.png")
+save_png(image, "examples/rainbow/image.png")
+print("Image saved to examples/rainbow/image.png")

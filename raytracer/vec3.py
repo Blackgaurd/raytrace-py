@@ -13,7 +13,7 @@ class Vec3:
 
     @classmethod
     def from_rgb(cls, red: float, green: float, blue: float) -> Vec3:
-        return Vec3(red, green, blue) / 255
+        return cls(red, green, blue) / 255
 
     def normalize(self) -> Vec3:
         return self / self.norm()

@@ -29,7 +29,8 @@ class Triangle(Object):
         return -self.N
 
     def intersect(self, ray_o: Vec3, ray_d: Vec3) -> Tuple[bool, float]:
-        # todo: upgrade to moller-trumbore algorithm
+        # there exist faster triangle-ray intersection algorithms
+        # but this is good enough for now
 
         N_ray_dir = ray_d.dot(self.N)
         if abs(N_ray_dir) < EPSILON:
