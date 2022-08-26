@@ -14,3 +14,6 @@ class PointLight(Light):
 
     def direction_at(self, point: Vec3) -> Vec3:
         return (self.position - point).normalize()
+
+    def __repr__(self) -> str:
+        return f"PointLight(origin={self.position}, color={self.color}, intensity={self.intensity})"

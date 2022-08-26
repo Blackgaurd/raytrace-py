@@ -63,3 +63,9 @@ class Triangle(Object):
             return False, 0
 
         return True, t
+
+    def __repr__(self) -> str:
+        return f"Triangle(a={self.a}, b={self.b}, c={self.c}, material={self.material})"
+
+    def __str__(self) -> str:
+        return f"Triangle(a={self.a}, b={self.b}, c={self.c}, m={self.material})"

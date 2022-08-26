@@ -43,3 +43,9 @@ class Sphere(Object):
         if t < 0:
             return False, 0
         return True, t
+
+    def __repr__(self) -> str:
+        return f"Sphere(origin={self.origin}, radius={self.radius}, material={self.material})"
+
+    def __str__(self) -> str:
+        return f"Sphere(o={self.origin}, r={self.radius}, m={self.material})"

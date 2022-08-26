@@ -10,3 +10,6 @@ class Diffuse(Material):
         # that gets reflected
         self.albedo = albedo
         self.type = MaterialBehavior.diffuse
+
+    def __repr__(self) -> str:
+        return f"Diffuse(albedo={self.albedo})"

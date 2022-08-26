@@ -68,3 +68,9 @@ class ReflectRefract(Reflect):
         Rs = ((air_ior * cosi) - (ior * cost)) / ((air_ior * cosi) + (ior * cost))
         Rp = ((ior * cosi) - (air_ior * cost)) / ((ior * cosi) + (air_ior * cost))
         return (Rs**2 + Rp**2) / 2
+
+    def __repr__(self) -> str:
+        return f"ReflectRefract(refractive index={self.ior})"
+
+    def __str__(self) -> str:
+        return f"ReflectRefract(ior={self.ior})"

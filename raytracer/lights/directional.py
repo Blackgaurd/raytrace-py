@@ -17,3 +17,6 @@ class DirectionalLight(Light):
 
     def direction_at(self, point: Vec3) -> Vec3:
         return self.direction
+
+    def __repr__(self) -> str:
+        return f"DirectionalLight(direction={self.direction}, color={self.color}, intensity={self.intensity})"
