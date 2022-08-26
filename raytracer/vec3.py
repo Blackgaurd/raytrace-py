@@ -81,6 +81,9 @@ class Vec3:
                 f"unsupported operand type(s) for *: {type(self)} and {type(other)}"
             )
 
+    def __rmul__(self, other: Vec3 | float | int) -> Vec3:
+        return self * other
+
     def __truediv__(self, other: Vec3 | float | int) -> Vec3:
         if isinstance(other, Vec3):
             return Vec3(self.x / other.x, self.y / other.y, self.z / other.z)

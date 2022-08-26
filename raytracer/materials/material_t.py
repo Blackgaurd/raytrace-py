@@ -9,4 +9,4 @@ class Material:
 class MaterialBehavior(Enum):
     diffuse = 1
     reflect = 2
-    reflect_and_refract = 3
+    reflect_refract = 3

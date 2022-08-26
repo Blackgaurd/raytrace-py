@@ -87,6 +87,26 @@ def cast_ray(
             * 0.8  # rough fresnel effect approximation
         )
 
+    elif obj.material.type == MaterialBehavior.reflect_refract:
+        refract_k = obj.material.fresnel(ray_d, normal)
+        outside = ray_d.dot(normal) < 0
+        ray_o = intersect + bias if outside else intersect - bias
+
+        refract_color = Vec3(0, 0, 0)
+        if refract_k < 1:
+            # refraction occurs
+            refract_d = obj.material.refract(ray_d, normal)
+            refract_color = cast_ray(
+                ray_o, refract_d, objects, lights, settings, max_depth - 1
+            )
+
+        reflect_d = obj.material.reflect(ray_d, normal)
+        reflect_color = cast_ray(
+            ray_o, reflect_d, objects, lights, settings, max_depth - 1
+        )
+
+        hit_color += refract_color * refract_k + reflect_color * (1 - refract_k)
+
     return hit_color
 
 
