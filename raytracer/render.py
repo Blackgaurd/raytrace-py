@@ -7,6 +7,7 @@ from alive_progress import alive_bar
 from raytracer.lights import Light
 from raytracer.materials import MaterialBehavior
 from raytracer.objects import Object
+from raytracer.objects.mesh import Mesh
 from raytracer.options import Resolution, Settings
 from raytracer.vec3 import Vec3
 
@@ -130,6 +131,14 @@ def render(
     image = [[Vec3(0, 0, 0) for _ in range(img_res.w)] for _ in range(img_res.h)]
 
     AA = anti_aliasing
+
+    new_objects = []
+    for obj in objects:
+        if isinstance(obj, Mesh):
+            new_objects.extend(obj.triangles)
+        else:
+            new_objects.append(obj)
+    objects = new_objects
 
     with alive_bar(img_res.w * img_res.h * AA**2, title="Rendering") as bar:
         for i, j in itertools.product(range(img_res.h), range(img_res.w)):
