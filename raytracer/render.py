@@ -1,7 +1,7 @@
 import itertools
 import math
 import sys
-from typing import List
+from typing import List, Sequence
 
 from raytracer.lights import Light
 from raytracer.linalg import Vec3
@@ -12,7 +12,7 @@ from raytracer.options import Resolution, Settings
 
 
 def check_interference(
-    ray_o: Vec3, ray_d: Vec3, objects: List[Object], source_ind: int
+    ray_o: Vec3, ray_d: Vec3, objects: Sequence[Object], source_ind: int
 ) -> bool:
     # check if ray intersects with any object
     # assuming that all objects are opaque
@@ -28,8 +28,8 @@ def check_interference(
 def cast_ray(
     ray_o: Vec3,
     ray_d: Vec3,
-    objects: List[Object],
-    lights: List[Light],
+    objects: Sequence[Object],
+    lights: Sequence[Light],
     settings: Settings,
     max_depth: int,
 ) -> Vec3:
@@ -112,8 +112,8 @@ def cast_ray(
 
 def render(
     camera: Vec3,
-    objects: List[Object],
-    lights: List[Light],
+    objects: Sequence[Object],
+    lights: Sequence[Light],
     settings: Settings,
     *,
     anti_aliasing: int = 1,
