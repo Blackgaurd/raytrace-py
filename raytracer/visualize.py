@@ -2,7 +2,7 @@ from typing import List
 
 from PIL import Image
 
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 
 def save_ppm(img: List[List[Vec3]], filename: str):

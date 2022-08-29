@@ -9,7 +9,7 @@ from raytracer.materials import MaterialBehavior
 from raytracer.objects import Object
 from raytracer.objects.mesh import Mesh
 from raytracer.options import Resolution, Settings
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 
 def check_interference(

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Union
 
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 EPSILON = 1e-4
 

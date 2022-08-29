@@ -1,7 +1,7 @@
 from typing import Tuple
 
 from raytracer.materials import Material
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 
 class Object:

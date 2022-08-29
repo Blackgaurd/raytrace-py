@@ -6,7 +6,7 @@ from raytracer.materials import Diffuse
 from raytracer.materials.material_t import Material
 from raytracer.objects.object_t import Object
 from raytracer.objects.triangle import Triangle
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 
 class Mesh(Object):

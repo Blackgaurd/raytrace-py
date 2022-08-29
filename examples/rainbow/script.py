@@ -3,7 +3,7 @@ from raytracer.materials import Diffuse, Reflect
 from raytracer.objects import Sphere, Triangle
 from raytracer.options import Resolution, Settings
 from raytracer.render import render
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 from raytracer.visualize import save_png
 
 settings = Settings(

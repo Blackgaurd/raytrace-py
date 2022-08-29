@@ -1,5 +1,5 @@
 from raytracer.lights.light_t import Light
-from raytracer.vec3 import Vec3
+from raytracer.linalg import Vec3
 
 
 class DirectionalLight(Light):
