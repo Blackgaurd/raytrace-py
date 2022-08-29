@@ -1,4 +1,5 @@
 import time
+
 from raytracer.lights import PointLight
 from raytracer.linalg import Vec3
 from raytracer.materials import Diffuse
@@ -33,7 +34,9 @@ look_from = Vec3(-10, 0, 0)
 look_at = Vec3(-9, 0, 0)
 
 start = time.time()
-image = render(look_from, look_at, objects, lights, settings, anti_aliasing=2, recursion_depth=10)
+image = render(
+    look_from, look_at, objects, lights, settings, anti_aliasing=2, recursion_depth=10
+)
 print(f"Rendered in {time.time() - start:.2f} seconds")
 
 save_png(image, "examples/color-lights/image.png")
