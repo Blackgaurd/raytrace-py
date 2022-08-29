@@ -1,15 +1,14 @@
 import itertools
 import math
+import sys
 from typing import List
 
-from alive_progress import alive_bar
-
 from raytracer.lights import Light
-from raytracer.materials import MaterialBehavior
+from raytracer.linalg import Vec3
+from raytracer.materials import Diffuse, Reflect, ReflectRefract
 from raytracer.objects import Object
 from raytracer.objects.mesh import Mesh
 from raytracer.options import Resolution, Settings
-from raytracer.linalg import Vec3
 
 
 def check_interference(
@@ -18,7 +17,7 @@ def check_interference(
     # check if ray intersects with any object
     # assuming that all objects are opaque
     for i, obj in enumerate(objects):
-        if i == source_ind or obj.material.type != MaterialBehavior.diffuse:
+        if i == source_ind or not isinstance(obj.material, Diffuse):
             continue
         intersect, t = obj.intersect(ray_o, ray_d)
         if intersect:
@@ -49,19 +48,19 @@ def cast_ray(
         return settings.background_color
 
     obj = objects[obj_ind]
-    intersect: Vec3 = ray_o + ray_d * closest_t
-    normal = obj.normal(ray_d, intersect)
+    intersect_p: Vec3 = ray_o + ray_d * closest_t
+    normal = obj.normal(ray_d, intersect_p)
     bias = normal * settings.bias
 
     hit_color = Vec3(0, 0, 0)
 
-    if obj.material.type == MaterialBehavior.diffuse:
+    if isinstance(obj.material, Diffuse):
         # diffuse lighting
         for light in lights:
-            light_dir = light.direction_at(intersect)
+            light_dir = light.direction_at(intersect_p)
 
             # shadows
-            if check_interference(intersect + bias, light_dir, objects, obj_ind):
+            if check_interference(intersect_p + bias, light_dir, objects, obj_ind):
                 continue
 
             # shading
@@ -73,12 +72,12 @@ def cast_ray(
                 * max(0, normal.dot(light_dir))
             )
 
-    elif obj.material.type == MaterialBehavior.reflect:
+    elif isinstance(obj.material, Reflect):
         # perfect mirror reflection
         reflect_d = obj.material.reflect(ray_d, normal)
         hit_color += (
             cast_ray(
-                intersect + bias,
+                intersect_p + bias,
                 reflect_d,
                 objects,
                 lights,
@@ -88,10 +87,10 @@ def cast_ray(
             * 0.8  # rough fresnel effect approximation
         )
 
-    elif obj.material.type == MaterialBehavior.reflect_refract:
+    elif isinstance(obj.material, ReflectRefract):
         refract_k = obj.material.fresnel(ray_d, normal)
         outside = ray_d.dot(normal) < 0
-        ray_o = intersect + bias if outside else intersect - bias
+        ray_o = intersect_p + bias if outside else intersect_p - bias
 
         refract_color = Vec3(0, 0, 0)
         if refract_k < 1:
@@ -128,11 +127,14 @@ def render(
     world_res = Resolution(world_res_w, world_res_w * img_res.h / img_res.w)
     cell_size = world_res.w / img_res.w
 
+    if not (isinstance(img_res.w, int) and isinstance(img_res.h, int)):
+        sys.stderr.write("Image resolution must be integer, casting to int\n")
+        img_res.w, img_res.h = int(img_res.w), int(img_res.h)
     image = [[Vec3(0, 0, 0) for _ in range(img_res.w)] for _ in range(img_res.h)]
 
     AA = anti_aliasing
 
-    new_objects = []
+    new_objects: List[Object] = []
     for obj in objects:
         if isinstance(obj, Mesh):
             new_objects.extend(obj.triangles)
@@ -140,22 +142,20 @@ def render(
             new_objects.append(obj)
     objects = new_objects
 
-    with alive_bar(img_res.w * img_res.h * AA**2, title="Rendering") as bar:
-        for i, j in itertools.product(range(img_res.h), range(img_res.w)):
-            for a_i, a_j in itertools.product(range(AA), range(AA)):
-                p2 = Vec3(
-                    camera.x + settings.distance_to_image,
-                    (img_res.h - i) * cell_size
-                    + (cell_size / AA) * (a_i + 0.5)
-                    - world_res.h / 2,
-                    j * cell_size + (cell_size / AA) * (a_j + 0.5) - world_res.w / 2,
-                )
-                ray_d = p2 - camera
+    for i, j in itertools.product(range(img_res.h), range(img_res.w)):
+        for a_i, a_j in itertools.product(range(AA), range(AA)):
+            p2 = Vec3(
+                camera.x + settings.distance_to_image,
+                (img_res.h - i) * cell_size
+                + (cell_size / AA) * (a_i + 0.5)
+                - world_res.h / 2,
+                j * cell_size + (cell_size / AA) * (a_j + 0.5) - world_res.w / 2,
+            )
+            ray_d = p2 - camera
 
-                image[i][j] += cast_ray(
-                    camera, ray_d, objects, lights, settings, recursion_depth
-                )
-                bar()
-            image[i][j] /= AA**2
+            image[i][j] += cast_ray(
+                camera, ray_d, objects, lights, settings, recursion_depth
+            )
+        image[i][j] /= AA**2
 
     return image

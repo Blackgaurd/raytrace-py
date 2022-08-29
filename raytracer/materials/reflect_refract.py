@@ -1,8 +1,7 @@
 import math
 
-from raytracer.materials.material_t import MaterialBehavior
-from raytracer.materials.reflect import Reflect
 from raytracer.linalg import Vec3
+from raytracer.materials.reflect import Reflect
 
 
 def clamp(x: float, _min: float, _max: float) -> float:
@@ -11,12 +10,11 @@ def clamp(x: float, _min: float, _max: float) -> float:
 
 class ReflectRefract(Reflect):
     __slots__ = ("type", "ior")
-    AIR_IOR = 1
+    AIR_IOR: float = 1
 
     def __init__(self, refractive_index: float):
         # ior stands for index of refraction
         self.ior = refractive_index
-        self.type = MaterialBehavior.reflect_refract
 
     def refract(self, ray_d: Vec3, normal: Vec3) -> Vec3:
         n_dot_i = normal.dot(ray_d)

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from typing import List
+from typing import Sequence
 
-from raytracer.materials import Diffuse
+from raytracer.linalg import Vec3
 from raytracer.materials.material_t import Material
 from raytracer.objects.object_t import Object
 from raytracer.objects.triangle import Triangle
-from raytracer.linalg import Vec3
 
 
 class Mesh(Object):
@@ -16,7 +15,7 @@ class Mesh(Object):
 
     __slots__ = ("objects",)
 
-    def __init__(self, objects: List[Object]):
+    def __init__(self, objects: Sequence[Triangle]):
         self.triangles = objects
 
     @classmethod

@@ -1,5 +1,5 @@
-from raytracer.materials.material_t import Material, MaterialBehavior
 from raytracer.linalg import Vec3
+from raytracer.materials.material_t import Material
 
 
 class Diffuse(Material):
@@ -9,7 +9,6 @@ class Diffuse(Material):
         # albedo is the amount of light (red, green, blue)
         # that gets reflected
         self.albedo = albedo
-        self.type = MaterialBehavior.diffuse
 
     def __repr__(self) -> str:
         return f"Diffuse(albedo={self.albedo})"

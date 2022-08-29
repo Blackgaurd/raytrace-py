@@ -70,6 +70,16 @@ class Vec3:
 
         return ret
 
+    def to_rgba(self) -> int:
+        # converts to hex color (0xRRGGBBAA)
+        r, g, b = map(lambda x: round(x * 255), (self.x, self.y, self.z))
+        return (r << 16 | g << 8 | b) << 8 | 255
+
+    def to_abgr(self) -> int:
+        # converts to reversed hex color (0xAABBGGRR)
+        r, g, b = map(lambda x: round(x * 255), (self.x, self.y, self.z))
+        return 255 << 24 | b << 16 | g << 8 | r
+
     def __repr__(self) -> str:
         return f"Vec3({self.x}, {self.y}, {self.z})"
 
@@ -163,6 +173,7 @@ class Mat44:
         for i in range(4):
             for j in range(4):
                 ret.arr[i][j] = sum(self.arr[i][k] * other.arr[k][j] for k in range(4))
+        return ret
 
     def __getitem__(self, index: int) -> List[float]:
         return self.arr[index]
