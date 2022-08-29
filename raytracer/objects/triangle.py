@@ -1,9 +1,8 @@
 from typing import Tuple
 
-from raytracer.linalg import Vec3
+from raytracer.linalg import EPSILON, Vec3
 from raytracer.materials import Material
 from raytracer.objects.object_t import Object
-from raytracer.options import EPSILON
 
 
 class Triangle(Object):

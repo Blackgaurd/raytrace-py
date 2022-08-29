@@ -1,3 +1,4 @@
+import time
 from raytracer.lights import DirectionalLight
 from raytracer.linalg import Vec3
 from raytracer.materials import Diffuse, Reflect
@@ -9,7 +10,6 @@ from raytracer.visualize import save_png
 settings = Settings(
     Vec3.from_rgb(184, 255, 217), Resolution(w=1920, h=1080), 1, 70, 0.01
 )
-camera = Vec3(-10, 0, 0)
 objects = [
     Triangle(Vec3(-10, -2, -10), Vec3(10, -2, -10), Vec3(-10, -2, 10), Reflect()),
     Triangle(Vec3(10, -2, -10), Vec3(-10, -2, 10), Vec3(10, -2, 10), Reflect()),
@@ -26,6 +26,13 @@ lights = [
     DirectionalLight(Vec3(-1, -1, -0.9), Vec3(1, 1, 1), 1),
     DirectionalLight(Vec3(1, -0.3, 1), Vec3(1, 1, 1), 1),
 ]
-image = render(camera, objects, lights, settings, anti_aliasing=2, recursion_depth=10)
+
+look_from = Vec3(-10, 0, 0)
+look_at = Vec3(-9, 0, 0)
+
+start = time.time()
+image = render(look_from, look_at, objects, lights, settings, anti_aliasing=2, recursion_depth=10)
+print(f"Rendered in {time.time() - start:.2f} seconds")
+
 save_png(image, "examples/rainbow/image.png")
 print("Image saved to examples/rainbow/image.png")

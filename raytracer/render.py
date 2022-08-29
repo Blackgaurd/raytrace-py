@@ -4,10 +4,9 @@ import sys
 from typing import List, Sequence
 
 from raytracer.lights import Light
-from raytracer.linalg import Vec3
+from raytracer.linalg import Mat44, Vec3
 from raytracer.materials import Diffuse, Reflect, ReflectRefract
-from raytracer.objects import Object
-from raytracer.objects.mesh import Mesh
+from raytracer.objects import Mesh, Object
 from raytracer.options import Resolution, Settings
 
 
@@ -111,13 +110,15 @@ def cast_ray(
 
 
 def render(
-    camera: Vec3,
+    look_from: Vec3,
+    look_at: Vec3,
     objects: Sequence[Object],
     lights: Sequence[Light],
     settings: Settings,
     *,
     anti_aliasing: int = 1,
     recursion_depth: int = 5,
+    camera_up: Vec3 = Vec3(0, 1, 0),
 ) -> List[List[Vec3]]:
     # todo: add asserts
 
@@ -142,19 +143,23 @@ def render(
             new_objects.append(obj)
     objects = new_objects
 
+    camera = Mat44.camera(look_from, look_at, camera_up)
     for i, j in itertools.product(range(img_res.h), range(img_res.w)):
         for a_i, a_j in itertools.product(range(AA), range(AA)):
-            p2 = Vec3(
-                camera.x + settings.distance_to_image,
+            # first cast ray from (0, 0, 0) into -z direction to
+            # the image plane, then translate using the camera matrix
+
+            ray_d = Vec3(
+                j * cell_size + (cell_size / AA) * (a_j + 0.5) - world_res.w / 2,
                 (img_res.h - i) * cell_size
                 + (cell_size / AA) * (a_i + 0.5)
                 - world_res.h / 2,
-                j * cell_size + (cell_size / AA) * (a_j + 0.5) - world_res.w / 2,
-            )
-            ray_d = p2 - camera
+                -settings.distance_to_image,
+            ).normalize()
+            ray_d = camera.transform_dir(ray_d)
 
             image[i][j] += cast_ray(
-                camera, ray_d, objects, lights, settings, recursion_depth
+                look_from, ray_d, objects, lights, settings, recursion_depth
             )
         image[i][j] /= AA**2
 

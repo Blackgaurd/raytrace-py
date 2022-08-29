@@ -3,8 +3,6 @@ from typing import Union
 
 from raytracer.linalg import Vec3
 
-EPSILON = 1e-4
-
 
 @dataclass
 class Resolution:
