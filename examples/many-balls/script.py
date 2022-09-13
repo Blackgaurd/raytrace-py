@@ -1,5 +1,5 @@
 import time
-from random import uniform, seed
+from random import seed, uniform
 
 from raytracer import render
 from raytracer.lights import DirectionalLight
@@ -41,7 +41,7 @@ for i in range(num_objects):
             material = Diffuse(color)
         else:
             material = ReflectRefract(1.52)
-            #material = Reflect()
+            # material = Reflect()
         objects.append(Sphere(origin, radius, material))
 
 lights = [

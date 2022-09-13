@@ -81,14 +81,14 @@ def cast_ray(
             refract_color = cast_ray(
                 intersect_p - bias, refract_d, objects, lights, settings, max_depth - 1
             )
-            #print(refract_color)
+            # print(refract_color)
 
         reflect_d = obj.material.reflect(ray_d, normal)
         reflect_color = cast_ray(
             intersect_p + bias, reflect_d, objects, lights, settings, max_depth - 1
         )
 
-        #print(refract_color, reflect_color)
+        # print(refract_color, reflect_color)
 
         hit_color += reflect_color * refract_k + refract_color * (1 - refract_k)
 
