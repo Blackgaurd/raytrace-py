@@ -71,6 +71,27 @@ def cast_ray(
                 * max(0, normal.dot(light_dir))
             )
 
+    elif isinstance(obj.material, ReflectRefract):
+        refract_k = obj.material.fresnel(ray_d, normal)
+
+        refract_color = Vec3(0, 0, 0)
+        if refract_k < 1:
+            # refraction occurs
+            refract_d = obj.material.refract(ray_d, normal)
+            refract_color = cast_ray(
+                intersect_p - bias, refract_d, objects, lights, settings, max_depth - 1
+            )
+            #print(refract_color)
+
+        reflect_d = obj.material.reflect(ray_d, normal)
+        reflect_color = cast_ray(
+            intersect_p + bias, reflect_d, objects, lights, settings, max_depth - 1
+        )
+
+        #print(refract_color, reflect_color)
+
+        hit_color += reflect_color * refract_k + refract_color * (1 - refract_k)
+
     elif isinstance(obj.material, Reflect):
         # perfect mirror reflection
         reflect_d = obj.material.reflect(ray_d, normal)
@@ -85,26 +106,6 @@ def cast_ray(
             )
             * 0.8  # rough fresnel effect approximation
         )
-
-    elif isinstance(obj.material, ReflectRefract):
-        refract_k = obj.material.fresnel(ray_d, normal)
-        outside = ray_d.dot(normal) < 0
-        ray_o = intersect_p + bias if outside else intersect_p - bias
-
-        refract_color = Vec3(0, 0, 0)
-        if refract_k < 1:
-            # refraction occurs
-            refract_d = obj.material.refract(ray_d, normal)
-            refract_color = cast_ray(
-                ray_o, refract_d, objects, lights, settings, max_depth - 1
-            )
-
-        reflect_d = obj.material.reflect(ray_d, normal)
-        reflect_color = cast_ray(
-            ray_o, reflect_d, objects, lights, settings, max_depth - 1
-        )
-
-        hit_color += refract_color * refract_k + reflect_color * (1 - refract_k)
 
     return hit_color
 
