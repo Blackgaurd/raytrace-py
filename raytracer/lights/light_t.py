@@ -2,7 +2,7 @@ from raytracer.linalg import Vec3
 
 
 class Light:
-    def __init__(self, color: Vec3, intensity: float, *args, **kwargs):
+    def __init__(self, color: Vec3, intensity: float) -> None:
         self.intensity = intensity
         self.color = color
         raise NotImplementedError()

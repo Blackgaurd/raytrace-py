@@ -119,6 +119,7 @@ def render(
     anti_aliasing: int = 1,
     recursion_depth: int = 5,
     camera_up: Vec3 = Vec3(0, 1, 0),
+    threads: int = 1,
 ) -> List[List[Vec3]]:
     # todo: add asserts
 
@@ -159,7 +160,12 @@ def render(
             ray_d = camera.transform_dir(ray_d)
 
             image[i][j] += cast_ray(
-                look_from, ray_d, objects, lights, settings, recursion_depth
+                look_from,
+                ray_d,
+                objects,
+                lights,
+                settings,
+                recursion_depth,
             )
         image[i][j] /= AA**2
 

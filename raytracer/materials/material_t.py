@@ -1,3 +1,3 @@
 class Material:
-    def __init__(self, *args, **kwargs):
+    def __init__(self) -> None:
         raise NotImplementedError()

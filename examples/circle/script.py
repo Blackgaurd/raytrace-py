@@ -5,7 +5,7 @@ from raytracer import render
 from raytracer.lights import PointLight
 from raytracer.linalg import Vec3
 from raytracer.materials import Diffuse
-from raytracer.objects import Sphere, Mesh
+from raytracer.objects import Mesh, Sphere
 from raytracer.options import Resolution, Settings
 from raytracer.visualize import save_png
 
@@ -22,7 +22,9 @@ objects = [
     Sphere(Vec3(0, -10000, 0), 10000, Diffuse(Vec3.from_rgb(200, 200, 200))),  # floor
     Sphere(Vec3(-5, 1, 0), 1, sphere_color),
     Sphere(Vec3(5, 1, 0), 1, sphere_color),
-    Mesh.from_obj("models/cube.obj", sphere_color, translate=Vec3(-2.5, 1, 2.5 * math.sqrt(3))),
+    Mesh.from_obj(
+        "models/cube.obj", sphere_color, translate=Vec3(-2.5, 1, 2.5 * math.sqrt(3))
+    ),
     Sphere(Vec3(2.5, 1, -2.5 * math.sqrt(3)), 1, sphere_color),
     Sphere(Vec3(-2.5, 1, -2.5 * math.sqrt(3)), 1, sphere_color),
     Sphere(Vec3(2.5, 1, 2.5 * math.sqrt(3)), 1, sphere_color),

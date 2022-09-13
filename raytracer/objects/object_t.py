@@ -5,7 +5,7 @@ from raytracer.materials import Material
 
 
 class Object:
-    def __init__(self, material: Material, *args, **kwargs):
+    def __init__(self, material: Material) -> None:
         self.material = material
         raise NotImplementedError()
 

@@ -86,7 +86,7 @@ class Vec3:
                 f"unsupported operand type(s) for -: {type(self)} and {type(other)}"
             )
 
-    def __neg__(self):
+    def __neg__(self) -> Vec3:
         return Vec3(-self.x, -self.y, -self.z)
 
     def __mul__(self, other: Vec3 | float | int) -> Vec3:
@@ -131,7 +131,7 @@ class Vec3:
 class Mat44:
     __slots__ = "arr"
 
-    def __init__(self):
+    def __init__(self) -> None:
         # identity matrix
         self.arr = [
             [1.0, 0.0, 0.0, 0.0],
